@@ -24,10 +24,16 @@ dependencies {
 	// Data base
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 
+	// Utils
+	compileOnly 'org.projectlombok:lombok:1.18.14'
+	annotationProcessor 'org.projectlombok:lombok:1.18.14'
+
 	// Test
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testCompileOnly 'org.projectlombok:lombok:1.18.14'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.14'
 
 }
 
