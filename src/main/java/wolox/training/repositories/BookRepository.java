@@ -8,6 +8,11 @@ import wolox.training.models.Book;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    /**
+     * Method that obtain a book by its author
+     * @param author: Name of author (String)
+     * @return {@link Book}
+     */
     Optional<Book> findFirstByAuthor(String author);
 
 }
