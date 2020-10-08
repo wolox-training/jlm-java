@@ -29,8 +29,8 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, name = "sub_title")
-    private String subTitle;
+    @Column(nullable = false)
+    private String subtitle;
 
     @Column(nullable = false)
     private String publisher;
