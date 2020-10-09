@@ -12,6 +12,6 @@ public interface BookRepository extends Repository<Book, Long> {
      * @param author: Name of author (String)
      * @return {@link Book}
      */
-    Optional<Book> findFirstByAuthor(String author);
+    Optional<Book> findByAuthor(String author);
 
 }
