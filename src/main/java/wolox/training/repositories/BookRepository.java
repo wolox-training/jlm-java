@@ -10,6 +10,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     /**
      * Method that obtain a book by its author
+     *
      * @param author: Name of author (String)
      * @return {@link Book}
      */
