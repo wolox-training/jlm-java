@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.BookPreconditionFailedException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api//books")
 public class BookController {
 
     private final BookRepository bookRepository;
@@ -27,7 +27,7 @@ public class BookController {
 
     }
 
-    @GetMapping()
+    @GetMapping
     public Iterable<Book> findAll() {
 
         return bookRepository.findAll();
@@ -54,8 +54,7 @@ public class BookController {
     public Book update(@RequestBody Book book, @PathVariable Long id) {
 
         if (book.getId() != id) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                "Book's verification required");
+            throw new BookPreconditionFailedException();
         }
 
         bookRepository.findById(id)
