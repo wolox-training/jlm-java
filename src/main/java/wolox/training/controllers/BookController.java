@@ -16,7 +16,7 @@ import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
 @RestController
-@RequestMapping("/api//books")
+@RequestMapping("/api/books")
 public class BookController {
 
     private final BookRepository bookRepository;
