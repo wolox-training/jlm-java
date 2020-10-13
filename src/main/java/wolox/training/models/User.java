@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -42,7 +42,7 @@ public class User {
     private LocalDate birthdate;
 
     @NotNull
-    @OneToMany(mappedBy = "user")
+    @ManyToMany(mappedBy = "users")
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
@@ -66,6 +66,5 @@ public class User {
         return books.remove(book);
 
     }
-
 
 }
