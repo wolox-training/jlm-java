@@ -47,13 +47,13 @@ public class User {
 
     public List<Book> getBooks() {
 
-        return Collections.unmodifiableList(this.books);
+        return Collections.unmodifiableList(books);
 
     }
 
     public void addBook(Book book) {
 
-        if (this.books.stream().anyMatch(bookDB -> bookDB.equals(book))) {
+        if (this.books.contains(book)) {
             throw new BookAlreadyOwnedException();
         }
 
@@ -63,7 +63,7 @@ public class User {
 
     public boolean removeBook(Book book) {
 
-        return this.books.remove(book);
+        return books.remove(book);
 
     }
 
