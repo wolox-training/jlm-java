@@ -27,6 +27,11 @@ public class BookController {
 
     }
 
+    /**
+     * Method that gets all books
+     *
+     * @return all {@link Book}
+     */
     @GetMapping
     public Iterable<Book> findAll() {
 
@@ -34,6 +39,12 @@ public class BookController {
 
     }
 
+    /**
+     * Method that obtain a book by id
+     *
+     * @param id: Book identifier (Long)
+     * @return {@link Book}
+     */
     @GetMapping("/{id}")
     public Book findById(@PathVariable Long id) {
 
@@ -42,6 +53,12 @@ public class BookController {
 
     }
 
+    /**
+     * Book saving method
+     *
+     * @param book: Request body ({@link Book})
+     * @return {@link Book}
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book save(@RequestBody Book book) {
@@ -50,6 +67,13 @@ public class BookController {
 
     }
 
+    /**
+     * Book updating method
+     *
+     * @param book: Request body ({@link Book})
+     * @param id: Book identifier (Long)
+     * @return {@link Book}
+     */
     @PutMapping("/{id}")
     public Book update(@RequestBody Book book, @PathVariable Long id) {
 
@@ -64,6 +88,11 @@ public class BookController {
 
     }
 
+    /**
+     * Book deleting method
+     *
+     * @param id: Book identifier (Long)
+     */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
 
