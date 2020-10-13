@@ -1,13 +1,17 @@
 package wolox.training.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@EqualsAndHashCode(exclude = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
@@ -37,6 +42,7 @@ public class Book {
     private String title;
 
     @NotNull
+    @Column(name = "subtitle")
     private String subtitle;
 
     @NotNull
@@ -50,5 +56,9 @@ public class Book {
 
     @NotNull
     private String isbn;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
