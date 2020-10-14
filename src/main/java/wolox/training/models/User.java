@@ -3,10 +3,13 @@ package wolox.training.models;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -42,7 +45,11 @@ public class User {
     private LocalDate birthdate;
 
     @NotNull
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_book",
+        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
