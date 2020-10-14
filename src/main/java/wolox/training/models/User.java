@@ -42,7 +42,7 @@ public class User {
     private LocalDate birthdate;
 
     @NotNull
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
