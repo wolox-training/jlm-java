@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.authentication.IAuthentication;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.exceptions.UserPreconditionFailedException;
 import wolox.training.models.Book;
@@ -21,11 +22,25 @@ import wolox.training.repositories.UserRepository;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final IAuthentication authentication;
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(IAuthentication authentication, UserRepository userRepository) {
 
+        this.authentication = authentication;
         this.userRepository = userRepository;
+
+    }
+
+    /**
+     * Method that gets authenticated user
+     *
+     * @return username (String)
+     */
+    @GetMapping("/principal")
+    public String authenticatedCurrentUser() {
+
+        return authentication.getAuthentication().getName();
 
     }
 
