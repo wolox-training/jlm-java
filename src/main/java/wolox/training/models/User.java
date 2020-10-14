@@ -3,7 +3,6 @@ package wolox.training.models;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,7 +44,7 @@ public class User {
     private LocalDate birthdate;
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "users_book",
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
