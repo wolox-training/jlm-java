@@ -41,7 +41,6 @@ public class User {
     @NotNull
     private LocalDate birthdate;
 
-    @NotNull
     @ManyToMany
     private List<Book> books = Collections.emptyList();
 
