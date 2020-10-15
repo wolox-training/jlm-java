@@ -39,7 +39,7 @@ public class BookController {
      * @return all {@link Book}
      */
     @GetMapping
-    @ApiOperation(value = "Return all books", response = Iterable.class)
+    @ApiOperation(value = "Return all books", response = Book.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully retrieved all books")
     })
@@ -94,7 +94,7 @@ public class BookController {
      * @return {@link Book}
      */
     @PutMapping("/{id}")
-    @ApiOperation(value = "Given an id and a book, return updated book")
+    @ApiOperation(value = "Given an id and a book, return updated book", response = Book.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully updated book"),
         @ApiResponse(code = 404, message = "Book not found"),
@@ -124,7 +124,7 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(code = 404, message = "Book not found")
     })
-    public void delete(@PathVariable Long id) {
+    public void delete(@ApiParam(value = "Id to find the book") @PathVariable Long id) {
 
         bookRepository.findById(id)
             .orElseThrow(BookNotFoundException::new);
