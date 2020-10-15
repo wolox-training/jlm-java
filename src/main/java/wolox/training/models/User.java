@@ -33,7 +33,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
     @SequenceGenerator(name = "users_seq", initialValue = 1)
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(notes = "In the request this field isn't sent")
     private long id;
 
     @NotNull

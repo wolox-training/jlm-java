@@ -31,7 +31,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
     @SequenceGenerator(name = "book_seq", initialValue = 1)
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(notes = "In the request this field isn't sent")
     private long id;
 
     @ApiModelProperty(example = "Horror")
