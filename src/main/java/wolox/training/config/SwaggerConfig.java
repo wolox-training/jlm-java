@@ -35,7 +35,7 @@ public class SwaggerConfig {
                 new Contact(
                     "Jaime Morales",
                     "https://github.com/wolox-training/jlm-java/tree/develop",
-                    "ing_jaimemorales@outlook.com"))
+                    "test@test.com"))
             .version("1.0.0")
             .build();
 
