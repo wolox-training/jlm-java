@@ -28,6 +28,8 @@ import lombok.Setter;
 @ApiModel(description = "Training API book")
 public class Book {
 
+    private static final int MINIMUM_AMOUNT_OF_PAGES = 20;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
     @SequenceGenerator(name = "book_seq", initialValue = 1)
@@ -130,8 +132,8 @@ public class Book {
 
     public void setPages(int pages) {
 
-        checkNotNull(pages, "Please check pages field, its null");
-        checkArgument(pages > 20, "Please check pages field, its can't be 20 or less than 20");
+        checkArgument(pages > MINIMUM_AMOUNT_OF_PAGES,
+            "Please check pages field, its can't be 20 or less than 20");
 
         this.pages = pages;
 
