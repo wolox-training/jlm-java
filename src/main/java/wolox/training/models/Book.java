@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
+@Builder
 @EqualsAndHashCode(exclude = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
