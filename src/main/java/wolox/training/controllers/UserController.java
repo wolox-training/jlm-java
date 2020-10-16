@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +31,14 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, BookRepository bookRepository) {
+    public UserController(UserRepository userRepository, BookRepository bookRepository,
+        PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.passwordEncoder = passwordEncoder;
 
     }
 
@@ -86,6 +90,8 @@ public class UserController {
         @ApiResponse(code = 201, message = "Successfully created user")
     })
     public User save(@RequestBody User user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
 
