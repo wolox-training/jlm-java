@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import wolox.training.models.Book;
@@ -27,11 +28,11 @@ public class UserControllerTest {
 
     private static final String USER_PATH = "/api/users";
     private static final int USER_ID = 0;
-    private static final int BOOK_ID = 0;
 
     private MockMvc mockMvc;
     private UserRepository userRepository;
     private BookRepository bookRepository;
+    private PasswordEncoder passwordEncoder;
     private User userTest;
 
     @BeforeEach
@@ -40,8 +41,10 @@ public class UserControllerTest {
         // Arrange
         userRepository = mock(UserRepository.class);
         bookRepository = mock(BookRepository.class);
+        passwordEncoder = mock(PasswordEncoder.class);
 
-        UserController userController = new UserController(userRepository, bookRepository);
+        UserController userController = new UserController(userRepository, bookRepository,
+            passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         userTest = User.builder().username("test.username")
@@ -99,7 +102,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void whenDelete_thenReturnDeletedBook() throws Exception {
+    void whenDelete_thenReturnIsOk() throws Exception {
 
         // Arrange
         when(userRepository.findById(any())).thenReturn(Optional.of(userTest));
