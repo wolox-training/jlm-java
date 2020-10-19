@@ -20,6 +20,7 @@ import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.exceptions.UserPreconditionFailedException;
 import wolox.training.models.Book;
+import wolox.training.models.PasswordReset;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
@@ -118,10 +119,43 @@ public class UserController {
             throw new UserPreconditionFailedException();
         }
 
-        userRepository.findById(id)
+        User userFound = userRepository.findById(id)
             .orElseThrow(UserNotFoundException::new);
 
+        user.setPassword(userFound.getPassword());
+
         return userRepository.save(user);
+
+    }
+
+    /**
+     * Password update method
+     *
+     * @param id:        User identifier (Long)
+     * @param passwords: Password request ({@link PasswordReset})
+     */
+    @PutMapping("/{id}/password")
+    @ApiOperation(value = "Given an id, the password is updated")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Password updated"),
+        @ApiResponse(code = 412, message = "User's verification required")
+    })
+    public void passwordReset(@ApiParam(value = "Id to find the user") @PathVariable Long id,
+        @RequestBody PasswordReset passwords) {
+
+        User userFound = userRepository.findById(id)
+            .orElseThrow(UserNotFoundException::new);
+
+        if (passwordEncoder.matches(passwords.getOldPassword(), userFound.getPassword())) {
+
+            userFound.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+            userRepository.save(userFound);
+
+        } else {
+
+            throw new UserPreconditionFailedException();
+
+        }
 
     }
 
