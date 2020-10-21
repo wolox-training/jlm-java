@@ -164,7 +164,7 @@ class BookControllerTest {
     }
 
     @Test
-    void whenDelete_thenReturnDeletedBook() throws Exception {
+    void whenDelete_thenReturnIsOk() throws Exception {
 
         // Arrange
         when(bookRepository.findById(any())).thenReturn(Optional.of(bookTest));
