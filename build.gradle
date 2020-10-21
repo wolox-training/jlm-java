@@ -22,20 +22,29 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// Data base
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 
+	// Documentation
+	compile 'io.springfox:springfox-swagger2:2.9.2'
+	compile 'io.springfox:springfox-swagger-ui:2.9.2'
+	compile 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
+
 	// Utils
 	compileOnly 'org.projectlombok:lombok:1.18.14'
 	annotationProcessor 'org.projectlombok:lombok:1.18.14'
+	compile 'com.google.guava:guava:27.0-jre'
 
 	// Test
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testImplementation 'junit:junit:4.12'
 	testCompileOnly 'org.projectlombok:lombok:1.18.14'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.14'
+	testCompile 'org.assertj:assertj-core:3.6.1'
 
 }
 
