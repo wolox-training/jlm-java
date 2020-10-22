@@ -2,6 +2,7 @@ package wolox.training.services;
 
 import java.util.Collections;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookNotFoundException;
@@ -28,7 +29,7 @@ public class BookService {
 
     public Iterable<Book> findAll(String isbn) {
 
-        if (!isbn.isEmpty()) {
+        if (StringUtils.isNotEmpty(isbn)) {
 
             return filterBookByIsbn(isbn);
 

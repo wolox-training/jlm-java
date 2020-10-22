@@ -131,7 +131,7 @@ class BookControllerTest {
     }
 
     @Test
-    void whenDelete_thenReturnDeletedBook() throws Exception {
+    void whenDelete_thenReturnIsOk() throws Exception {
 
         // Arrange
         doNothing().when(bookService).delete(any());

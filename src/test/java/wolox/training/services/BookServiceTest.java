@@ -10,12 +10,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.BookPreconditionFailedException;
@@ -23,7 +23,7 @@ import wolox.training.mappers.BookMapper;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
 
     private static final Long BOOK_ID = 0L;
@@ -43,7 +43,7 @@ public class BookServiceTest {
     @InjectMocks
     private BookService testClass;
 
-    @Before
+    @BeforeEach
     void setUp() {
 
         // Arrange
@@ -67,7 +67,7 @@ public class BookServiceTest {
         when(bookRepository.findAll()).thenReturn(Collections.singleton(bookTest));
 
         // Act
-        Iterable<Book> books = testClass.findAll(any());
+        Iterable<Book> books = testClass.findAll(null);
 
         // Assert
         assertThat(books.iterator().hasNext()).isTrue();
@@ -144,10 +144,6 @@ public class BookServiceTest {
 
     @Test
     void whenUpdate_thenReturnUpdatedBookPreconditionFailed() {
-
-        // Arrange
-        when(bookRepository.findById(any())).thenReturn(Optional.of(bookTest));
-        when(bookRepository.save(any())).thenReturn(bookTest);
 
         // Act - Assert
         assertThatThrownBy(() -> testClass.update(bookTest, INVALID_BOOK_ID))
