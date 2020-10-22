@@ -15,6 +15,7 @@ public class BookInfoDto {
 
     private String isbn;
     private String title;
+    private String subtitle;
     private String publishDate;
     private int numberOfPages;
     private List<PublisherDto> publishers;
