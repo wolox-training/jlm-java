@@ -3,6 +3,7 @@ package wolox.training.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -98,4 +99,58 @@ class BookRepositoryTest {
         assertThat(books.iterator().hasNext()).isFalse();
 
     }
+
+    @Test
+    void whenFindAnyParameters_thenReturnBookList() {
+
+        // Act
+        bookToSave = Book.builder().genre("Comedy")
+            .author(AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher("Publisher")
+            .year("2020")
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        List<Book> books = bookRepository
+            .findByAnyParameter(null, null, null, null, null, null, null);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(2);
+
+    }
+
+    @Test
+    void whenFindAnyParameters_thenReturnBookListFiltered() {
+
+        // Act
+        String genre = "Comedy";
+        bookToSave = Book.builder().genre(genre)
+            .author(AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher("Publisher")
+            .year("2020")
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        List<Book> books = bookRepository
+            .findByAnyParameter(genre, null, null, null, null, null, null);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+
+    }
+
 }

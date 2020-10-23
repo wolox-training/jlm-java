@@ -1,8 +1,8 @@
 package wolox.training.services;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookNotFoundException;
@@ -27,15 +27,31 @@ public class BookService {
 
     }
 
-    public Iterable<Book> findAll(String isbn) {
+    public Iterable<Book> findAll(Map<String, String> params) {
 
-        if (StringUtils.isNotEmpty(isbn)) {
+        if (!params.isEmpty()) {
 
-            return filterBookByIsbn(isbn);
+            if (params.get("isbn") != null) {
+
+                return filterBookByIsbn(params.get("isbn"));
+
+            } else {
+
+                return findByAnyParameter(params);
+
+            }
 
         }
 
         return bookRepository.findAll();
+
+    }
+
+    private Iterable<Book> findByAnyParameter(Map<String, String> params) {
+
+        return bookRepository.findByAnyParameter(params.get("genre"), params.get("author"),
+            params.get("image"), params.get("title"), params.get("subtitle"),
+            params.get("publisher"), params.get("year"));
 
     }
 
@@ -44,7 +60,7 @@ public class BookService {
         Optional<Book> bookOptional = bookRepository.findByIsbn(isbn);
         if (bookOptional.isPresent()) {
 
-            return Collections.singleton(bookOptional.get());
+            return Collections.singletonList(bookOptional.get());
 
         }
 
@@ -52,7 +68,7 @@ public class BookService {
             .map(bookInfoDto -> bookMapper.bookInfoDtoToToEntity(isbn, bookInfoDto))
             .orElseThrow(BookNotFoundException::new);
 
-        return Collections.singleton(bookRepository.save(bookFound));
+        return Collections.singletonList(bookRepository.save(bookFound));
 
     }
 
