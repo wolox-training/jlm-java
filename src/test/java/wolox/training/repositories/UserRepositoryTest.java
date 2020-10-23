@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -91,6 +92,33 @@ class UserRepositoryTest {
 
         // Assert
         assertThat(users.iterator().hasNext()).isFalse();
+
+    }
+
+    @Test
+    void whenFindBetweenTwoDate_thenReturnUserList() {
+
+        // Arrange
+        String name = "Gerardo Antonio";
+
+        userToSave = User.builder().username(USERNAME)
+            .password("56789")
+            .name(name)
+            .birthdate(LocalDate.now().minusDays(3))
+            .build();
+
+        userRepository.save(userToSave);
+
+        // Act
+        List<User> users = userRepository
+            .findByBirthdateLessThanEqualAndBirthdateGreaterThanEqualAndNameContainingIgnoreCase(
+                LocalDate.now(), LocalDate.now().minusDays(5), "gerar");
+
+        // Assert
+        assertThat(users.isEmpty()).isFalse();
+        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.get(0).getName()).isEqualTo(name);
+        assertThat(users.get(0).getUsername()).isEqualTo(userToSave.getUsername());
 
     }
 
