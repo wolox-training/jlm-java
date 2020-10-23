@@ -31,6 +31,7 @@ class UserRepositoryTest {
 
         // Arrange
         userToSave = User.builder().username(USERNAME)
+            .password("12345")
             .name("Test")
             .birthdate(LocalDate.now())
             .build();
@@ -101,6 +102,7 @@ class UserRepositoryTest {
         String name = "Gerardo Antonio";
 
         userToSave = User.builder().username(USERNAME)
+            .password("56789")
             .name(name)
             .birthdate(LocalDate.now().minusDays(3))
             .build();

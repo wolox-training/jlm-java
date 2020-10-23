@@ -42,6 +42,10 @@ public class User {
     private String username;
 
     @NotNull
+    @ApiModelProperty(required = true, notes = "Password of the user")
+    private String password;
+
+    @NotNull
     @ApiModelProperty(required = true, notes = "Name of the user", example = "Jaime Morales")
     private String name;
 
@@ -81,6 +85,14 @@ public class User {
         checkNotNull(username, "Please check username field, its null");
 
         this.username = username;
+
+    }
+
+    public void setPassword(String password) {
+
+        checkNotNull(password, "Please check password field, its null");
+
+        this.password = password;
 
     }
 
