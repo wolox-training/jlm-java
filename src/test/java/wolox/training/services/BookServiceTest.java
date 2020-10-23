@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 import wolox.training.client.delegate.OpenLibraryDelegate;
+import wolox.training.client.models.BookInfoDto;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.BookPreconditionFailedException;
 import wolox.training.mappers.BookMapper;
@@ -26,6 +31,7 @@ import wolox.training.repositories.BookRepository;
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
 
+    private static final PodamFactory FACTORY = new PodamFactoryImpl();
     private static final Long BOOK_ID = 0L;
     private static final Long INVALID_BOOK_ID = 1L;
 
@@ -64,10 +70,91 @@ public class BookServiceTest {
     void whenFindAll_thenReturnAllBooks() {
 
         // Arrange
-        when(bookRepository.findAll()).thenReturn(Collections.singleton(bookTest));
+        when(bookRepository.findAll()).thenReturn(Collections.singletonList(bookTest));
 
         // Act
-        Iterable<Book> books = testClass.findAll(null);
+        Iterable<Book> books = testClass.findAll(new HashMap<>());
+
+        // Assert
+        assertThat(books.iterator().hasNext()).isTrue();
+        assertThat(books.iterator().next().getIsbn()).isEqualTo(bookTest.getIsbn());
+        assertThat(books.iterator().next().getAuthor()).isEqualTo(bookTest.getAuthor());
+        assertThat(books.iterator().next().getGenre()).isEqualTo(bookTest.getGenre());
+        assertThat(books.iterator().next().getImage()).isEqualTo(bookTest.getImage());
+
+    }
+
+    @Test
+    void whenFindByIsbnInDB_thenReturnBook() {
+
+        // Arrange
+        Map<String, String> params = new HashMap<>();
+        params.put("isbn", "7892189121-A");
+
+        when(bookRepository.findByIsbn(any())).thenReturn(Optional.of(bookTest));
+
+        // Act
+        Iterable<Book> books = testClass.findAll(params);
+
+        // Assert
+        assertThat(books.iterator().hasNext()).isTrue();
+        assertThat(books.iterator().next().getIsbn()).isEqualTo(bookTest.getIsbn());
+        assertThat(books.iterator().next().getAuthor()).isEqualTo(bookTest.getAuthor());
+        assertThat(books.iterator().next().getGenre()).isEqualTo(bookTest.getGenre());
+        assertThat(books.iterator().next().getImage()).isEqualTo(bookTest.getImage());
+
+    }
+
+    @Test
+    void whenFindByIsbnInExternalApi_thenReturnBook() {
+
+        // Arrange
+        Map<String, String> params = new HashMap<>();
+        params.put("isbn", "7892189121-A");
+
+        BookInfoDto bookInfoDto = FACTORY.manufacturePojo(BookInfoDto.class);
+
+        when(bookRepository.findByIsbn(any())).thenReturn(Optional.empty());
+        when(openLibraryDelegate.findBookByIsbn(any())).thenReturn(Optional.of(bookInfoDto));
+        when(bookMapper.bookInfoDtoToToEntity(any(), any())).thenReturn(bookTest);
+
+        // Act
+        Iterable<Book> books = testClass.findAll(params);
+
+        // Assert
+        assertThat(books.iterator().hasNext()).isTrue();
+
+    }
+
+    @Test
+    void whenFindByIsbnInExternalApi_thenReturnBookNotFound() {
+
+        // Arrange
+        String isbn = "7892189121-A";
+        Map<String, String> params = new HashMap<>();
+        params.put("isbn", isbn);
+
+        when(bookRepository.findByIsbn(any())).thenReturn(Optional.empty());
+        when(openLibraryDelegate.findBookByIsbn(any())).thenReturn(Optional.empty());
+
+        // Act
+        assertThatThrownBy(() -> testClass.findAll(params))
+            .isInstanceOf(BookNotFoundException.class);
+
+    }
+
+    @Test
+    void whenFindByAnyParameter_thenReturnBookList() {
+
+        // Arrange
+        Map<String, String> params = new HashMap<>();
+        params.put("genre", "Horror");
+
+        when(bookRepository.findByAnyParameter(any(), any(), any(), any(), any(), any(), any()))
+            .thenReturn(Collections.singletonList(bookTest));
+
+        // Act
+        Iterable<Book> books = testClass.findAll(params);
 
         // Assert
         assertThat(books.iterator().hasNext()).isTrue();

@@ -60,7 +60,7 @@ class BookControllerTest {
     void whenFindAll_thenReturnAllBooks() throws Exception {
 
         // Arrange
-        when(bookService.findAll(any())).thenReturn(Collections.singleton(bookTest));
+        when(bookService.findAll(any())).thenReturn(Collections.singletonList(bookTest));
 
         // Act - Assert
         mockMvc.perform(get(BOOK_PATH)

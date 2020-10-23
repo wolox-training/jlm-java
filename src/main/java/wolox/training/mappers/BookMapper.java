@@ -19,7 +19,6 @@ public interface BookMapper {
      * @return {@link Book}
      */
     @Mapping(target = "isbn", source = "isbn")
-    @Mapping(target = "subtitle", source = "bookInfoDto.title")
     @Mapping(target = "year", source = "bookInfoDto.publishDate")
     @Mapping(target = "pages", source = "bookInfoDto.numberOfPages")
     @Mapping(target = "image", source = "bookInfoDto.cover.small")

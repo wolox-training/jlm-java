@@ -132,4 +132,61 @@ class BookRepositoryTest {
         assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
 
     }
+
+    @Test
+    void whenFindAnyParameters_thenReturnBookList() {
+
+        // Arrange
+        bookToSave = Book.builder().genre("Accion")
+            .author(DEFAULT_AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        // Act
+        List<Book> books = bookRepository
+            .findByAnyParameter(null, null, null, null, null, null, null);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(2);
+
+    }
+
+    @Test
+    void whenFindAnyParameters_thenReturnBookListFiltered() {
+
+        // Arrange
+        String genre = "Comedy";
+
+        bookToSave = Book.builder().genre(genre)
+            .author(DEFAULT_AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        // Act
+        List<Book> books = bookRepository
+            .findByAnyParameter(genre, null, null, null, null, null, null);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+
+    }
+
 }

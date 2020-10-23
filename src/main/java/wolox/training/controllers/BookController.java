@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,9 +43,9 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully retrieved all books")
     })
-    public Iterable<Book> findAll(@RequestParam(required = false) String isbn) {
+    public Iterable<Book> findAll(@RequestParam(required = false) Map<String, String> params) {
 
-        return bookService.findAll(isbn);
+        return bookService.findAll(params);
 
     }
 
