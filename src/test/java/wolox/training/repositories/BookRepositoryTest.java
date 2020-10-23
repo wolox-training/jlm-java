@@ -104,6 +104,36 @@ class BookRepositoryTest {
     }
 
     @Test
+    void whenFindByGenreAndPublisherAndYear_thenReturnBookList() {
+
+        // Arrange
+        bookToSave = Book.builder().genre("SUSPENSE")
+            .author(DEFAULT_AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        // Act
+        List<Book> books = bookRepository
+            .findByGenreAndPublisherAndYear(HORROR_GENRE, DEFAULT_PUBLISHER, DEFAULT_YEAR);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+        assertThat(books.get(0).getGenre()).isEqualTo(HORROR_GENRE);
+        assertThat(books.get(0).getPublisher()).isEqualTo(DEFAULT_PUBLISHER);
+        assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
+
+    }
+
+    @Test
     void whenFindByGenreAndPublisherAndYearCustom_thenReturnBookList() {
 
         // Arrange

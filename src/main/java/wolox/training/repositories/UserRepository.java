@@ -33,4 +33,15 @@ public interface UserRepository extends CrudRepository<User, Long> {
         @Param("maxDate") LocalDate maxDate, @Param("minDate") LocalDate minDate,
         @Param("nameContaining") String nameContaining);
 
+    /**
+     * Method that obtain all users if your birthdate be between two date
+     *
+     * @param maxDate:        Max date ({@link LocalDate})
+     * @param minDate:        Min date ({@link LocalDate})
+     * @param nameContaining: Name containing of the user (String)
+     * @return {@link User} list
+     */
+    List<User> findByBirthdateLessThanEqualAndBirthdateGreaterThanEqualAndNameContainingIgnoreCase(
+        LocalDate maxDate, LocalDate minDate, String nameContaining);
+
 }

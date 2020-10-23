@@ -122,4 +122,31 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    void whenFindBetweenTwoDate_thenReturnUserList() {
+
+        // Arrange
+        String name = "Gerardo Antonio";
+
+        userToSave = User.builder().username(USERNAME)
+            .password("56789")
+            .name(name)
+            .birthdate(LocalDate.now().minusDays(3))
+            .build();
+
+        userRepository.save(userToSave);
+
+        // Act
+        List<User> users = userRepository
+            .findByBirthdateLessThanEqualAndBirthdateGreaterThanEqualAndNameContainingIgnoreCase(
+                LocalDate.now(), LocalDate.now().minusDays(5), "gerar");
+
+        // Assert
+        assertThat(users.isEmpty()).isFalse();
+        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.get(0).getName()).isEqualTo(name);
+        assertThat(users.get(0).getUsername()).isEqualTo(userToSave.getUsername());
+
+    }
+
 }
