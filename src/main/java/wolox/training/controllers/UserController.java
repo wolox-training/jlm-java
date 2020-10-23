@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.authentication.IAuthentication;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.exceptions.UserPreconditionFailedException;
@@ -30,16 +31,30 @@ import wolox.training.repositories.UserRepository;
 @Api
 public class UserController {
 
+    private final IAuthentication authentication;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, BookRepository bookRepository,
-        PasswordEncoder passwordEncoder) {
+    public UserController(IAuthentication authentication, UserRepository userRepository,
+        BookRepository bookRepository, PasswordEncoder passwordEncoder) {
 
+        this.authentication = authentication;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.passwordEncoder = passwordEncoder;
+
+    }
+
+    /**
+     * Method that gets authenticated user
+     *
+     * @return username (String)
+     */
+    @GetMapping("/me")
+    public String authenticatedCurrentUser() {
+
+        return authentication.getAuthentication().getName();
 
     }
 

@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import wolox.training.authentication.IAuthentication;
 import wolox.training.models.Book;
 import wolox.training.models.PasswordReset;
 import wolox.training.models.User;
@@ -33,6 +34,7 @@ public class UserControllerTest {
     private static final int USER_ID = 0;
 
     private MockMvc mockMvc;
+    private IAuthentication authentication;
     private UserRepository userRepository;
     private BookRepository bookRepository;
     private PasswordEncoder passwordEncoder;
@@ -45,12 +47,13 @@ public class UserControllerTest {
         // Arrange
         objectMapper = new ObjectMapper();
 
+        authentication = mock(IAuthentication.class);
         userRepository = mock(UserRepository.class);
         bookRepository = mock(BookRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
 
-        UserController userController = new UserController(userRepository, bookRepository,
-            passwordEncoder);
+        UserController userController = new UserController(authentication, userRepository,
+            bookRepository, passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
         userTest = User.builder().username("test.username")
