@@ -19,7 +19,10 @@ import wolox.training.models.Book;
 class BookRepositoryTest {
 
     private static final int PAGE_NUMBER = 90;
-    private static final String AUTHOR = "Juan Osorio";
+    private static final String HORROR_GENRE = "Horror";
+    private static final String DEFAULT_AUTHOR = "Juan Osorio";
+    private static final String DEFAULT_PUBLISHER = "Publisher";
+    private static final String DEFAULT_YEAR = "2020";
 
     private Book bookToSave;
 
@@ -30,13 +33,13 @@ class BookRepositoryTest {
     void setUpData() {
 
         // Arrange
-        bookToSave = Book.builder().genre("Horror")
-            .author(AUTHOR)
+        bookToSave = Book.builder().genre(HORROR_GENRE)
+            .author(DEFAULT_AUTHOR)
             .image("horror.jpg")
             .title("Title")
             .subtitle("Subtitle")
-            .publisher("Publisher")
-            .year("2020")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
             .pages(PAGE_NUMBER)
             .isbn("0909-1234-6789-X")
             .build();
@@ -61,7 +64,7 @@ class BookRepositoryTest {
     void whenFindByAuthor_thenReturnBook() {
 
         // Act
-        Book bookFound = bookRepository.findByAuthor(AUTHOR).get();
+        Book bookFound = bookRepository.findByAuthor(DEFAULT_AUTHOR).get();
 
         // Assert
         assertThat(bookFound).isEqualToComparingFieldByField(bookToSave);
@@ -72,11 +75,11 @@ class BookRepositoryTest {
     void whenUpdate_thenReturnUpdatedBook() {
 
         // Act
-        Book bookFoundOld = bookRepository.findByAuthor(AUTHOR).get();
+        Book bookFoundOld = bookRepository.findByAuthor(DEFAULT_AUTHOR).get();
         bookFoundOld.setGenre("Comedy");
 
         bookRepository.save(bookFoundOld);
-        Book bookFoundUpdated = bookRepository.findByAuthor(AUTHOR).get();
+        Book bookFoundUpdated = bookRepository.findByAuthor(DEFAULT_AUTHOR).get();
 
         // Arrange
         assertThat(bookFoundUpdated.getGenre()).isEqualTo(bookFoundOld.getGenre());
@@ -89,7 +92,7 @@ class BookRepositoryTest {
     void whenDelete_thenReturnZeroBooks() {
 
         // Act
-        Book bookFound = bookRepository.findByAuthor(AUTHOR).get();
+        Book bookFound = bookRepository.findByAuthor(DEFAULT_AUTHOR).get();
 
         bookRepository.delete(bookFound);
 
@@ -101,22 +104,53 @@ class BookRepositoryTest {
     }
 
     @Test
-    void whenFindAnyParameters_thenReturnBookList() {
+    void whenFindByGenreAndPublisherAndYear_thenReturnBookList() {
 
-        // Act
-        bookToSave = Book.builder().genre("Comedy")
-            .author(AUTHOR)
+        // Arrange
+        bookToSave = Book.builder().genre("SUSPENSE")
+            .author(DEFAULT_AUTHOR)
             .image("horror.jpg")
             .title("Title")
             .subtitle("Subtitle")
-            .publisher("Publisher")
-            .year("2020")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
             .pages(PAGE_NUMBER)
             .isbn("0909-1234-6789-X")
             .build();
 
         bookRepository.save(bookToSave);
 
+        // Act
+        List<Book> books = bookRepository
+            .findByGenreAndPublisherAndYear(HORROR_GENRE, DEFAULT_PUBLISHER, DEFAULT_YEAR);
+
+        // Assert
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+        assertThat(books.get(0).getGenre()).isEqualTo(HORROR_GENRE);
+        assertThat(books.get(0).getPublisher()).isEqualTo(DEFAULT_PUBLISHER);
+        assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
+
+    }
+
+    @Test
+    void whenFindAnyParameters_thenReturnBookList() {
+
+        // Arrange
+        bookToSave = Book.builder().genre("Accion")
+            .author(DEFAULT_AUTHOR)
+            .image("horror.jpg")
+            .title("Title")
+            .subtitle("Subtitle")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
+            .pages(PAGE_NUMBER)
+            .isbn("0909-1234-6789-X")
+            .build();
+
+        bookRepository.save(bookToSave);
+
+        // Act
         List<Book> books = bookRepository
             .findByAnyParameter(null, null, null, null, null, null, null);
 
@@ -129,21 +163,23 @@ class BookRepositoryTest {
     @Test
     void whenFindAnyParameters_thenReturnBookListFiltered() {
 
-        // Act
+        // Arrange
         String genre = "Comedy";
+
         bookToSave = Book.builder().genre(genre)
-            .author(AUTHOR)
+            .author(DEFAULT_AUTHOR)
             .image("horror.jpg")
             .title("Title")
             .subtitle("Subtitle")
-            .publisher("Publisher")
-            .year("2020")
+            .publisher(DEFAULT_PUBLISHER)
+            .year(DEFAULT_YEAR)
             .pages(PAGE_NUMBER)
             .isbn("0909-1234-6789-X")
             .build();
 
         bookRepository.save(bookToSave);
 
+        // Act
         List<Book> books = bookRepository
             .findByAnyParameter(genre, null, null, null, null, null, null);
 
