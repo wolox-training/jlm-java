@@ -16,4 +16,12 @@ public interface BookRepository extends CrudRepository<Book, Long> {
      */
     Optional<Book> findByAuthor(String author);
 
+    /**
+     * Method that obtain a book by its isbn
+     *
+     * @param isbn: Isbn of book (String)
+     * @return {@link Book}
+     */
+    Optional<Book> findByIsbn(String isbn);
+
 }

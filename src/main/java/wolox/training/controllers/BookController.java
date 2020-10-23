@@ -13,23 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import wolox.training.exceptions.BookNotFoundException;
-import wolox.training.exceptions.BookPreconditionFailedException;
 import wolox.training.models.Book;
-import wolox.training.repositories.BookRepository;
+import wolox.training.services.BookService;
 
 @RestController
 @RequestMapping("/api/books")
 @Api
 public class BookController {
 
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
-    public BookController(BookRepository bookRepository) {
+    public BookController(BookService bookService) {
 
-        this.bookRepository = bookRepository;
+        this.bookService = bookService;
 
     }
 
@@ -43,9 +42,9 @@ public class BookController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Successfully retrieved all books")
     })
-    public Iterable<Book> findAll() {
+    public Iterable<Book> findAll(@RequestParam(required = false) String isbn) {
 
-        return bookRepository.findAll();
+        return bookService.findAll(isbn);
 
     }
 
@@ -63,8 +62,7 @@ public class BookController {
     })
     public Book findById(@ApiParam(value = "Id to find the book") @PathVariable Long id) {
 
-        return bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
+        return bookService.findById(id);
 
     }
 
@@ -82,7 +80,7 @@ public class BookController {
     })
     public Book save(@RequestBody Book book) {
 
-        return bookRepository.save(book);
+        return bookService.save(book);
 
     }
 
@@ -103,14 +101,7 @@ public class BookController {
     public Book update(@RequestBody Book book,
         @ApiParam(value = "Id to find the book") @PathVariable Long id) {
 
-        if (book.getId() != id) {
-            throw new BookPreconditionFailedException();
-        }
-
-        bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
-
-        return bookRepository.save(book);
+        return bookService.update(book, id);
 
     }
 
@@ -126,10 +117,7 @@ public class BookController {
     })
     public void delete(@ApiParam(value = "Id to find the book") @PathVariable Long id) {
 
-        bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
-
-        bookRepository.deleteById(id);
+        bookService.delete(id);
 
     }
 
