@@ -31,4 +31,12 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     List<Book> findByGenreAndPublisherAndYearCustom(@Param("genre") String genre,
         @Param("publisher") String publisher, @Param("year") String year);
 
+    /**
+     * Method that obtain a book by its isbn
+     *
+     * @param isbn: Isbn of book (String)
+     * @return {@link Book}
+     */
+    Optional<Book> findByIsbn(String isbn);
+
 }
